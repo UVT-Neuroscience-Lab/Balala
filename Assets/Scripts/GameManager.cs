@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameBoard;
     public Transform deckPosition;
     public float cardOffset = 0.05f;
+    public CardSelectionHandler cardSelectionHandler;
 
     [Header("Card Settings")]
     public float cardScale = 0.7f;  // Control the scale of cards
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+
         // First make sure all references are set
         if (deck == null)
         {

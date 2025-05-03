@@ -158,7 +158,7 @@ Transform:
   m_GameObject: {fileID: 160226421}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.81, y: -7.52, z: 0}
+  m_LocalPosition: {x: 15.89, y: -7.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -247,7 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 416402857}
   handArea: {fileID: 915686963}
-  handSize: 5
+  handSize: 8
   cardSpacing: 1.5
   handPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &473936903
@@ -599,7 +599,7 @@ Transform:
   m_GameObject: {fileID: 967154156}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.336, y: -0.278, z: 0}
+  m_LocalPosition: {x: 0.31, y: -0.278, z: 0}
   m_LocalScale: {x: 0.02, y: 0.04, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
