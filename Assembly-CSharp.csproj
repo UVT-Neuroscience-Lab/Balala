@@ -72,8 +72,10 @@
     <Compile Include="Assets\Scripts\TrainingDialog.cs" />
     <Compile Include="Assets\Scripts\PlayingCard.cs" />
     <Compile Include="Assets\Scripts\ConnectionDialog.cs" />
+    <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\AccuracyController.cs" />
+    <Compile Include="Assets\Scripts\Deck.cs" />
     <Compile Include="Assets\Scripts\BCIManager.cs" />
   </ItemGroup>
   <ItemGroup>

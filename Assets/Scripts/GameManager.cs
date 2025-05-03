@@ -1,74 +1,166 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject cardPrefab;
-    public Sprite cardBack;
-    public GameObject gameBoard; // Reference to the green square
+    public Deck deck;
+    public GameObject gameBoard;
+    public Transform deckPosition;
+    public float cardOffset = 0.05f;
+
+    [Header("Card Settings")]
+    public float cardScale = 0.7f;  // Control the scale of cards
+    // Move the deck extremely far to the right and bottom corner
+    public Vector3 deckCornerPosition = new Vector3(12.0f, -7.0f, 0f); 
+
+    // Add reference to the Player
+    public Player player;
+
+    public Transform deckArea;
+
+    private List<PlayingCard> cardsInPlay = new List<PlayingCard>();
+    private List<PlayingCard> deckStack = new List<PlayingCard>(); // Keep track of visual deck stack
 
     void Start()
     {
-        Debug.Log("GameManager Start() running...");
-
-        // Load all the sprites from the "card_faces" folder within Resources
-        Sprite[] cardFaces = Resources.LoadAll<Sprite>("card_faces");
-
-        if (cardFaces.Length == 0)
+        // First make sure all references are set
+        if (deck == null)
         {
-            Debug.LogError("No card faces loaded from Resources/card_faces!");
+            Debug.LogError("Deck reference is missing!");
             return;
         }
 
-        // Get the world position of the bottom-right screen corner
-        Vector3 bottomRightCorner = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, -Camera.main.transform.position.z));
-        bottomRightCorner.z = 0;
-
-        // Loop through each sprite (card face)
-        for (int i = 0; i < cardFaces.Length; i++)
+        if (player == null)
         {
-            Sprite face = cardFaces[i];
-            string[] nameParts = face.name.Split("_of_");
+            Debug.LogError("Player reference is missing!");
+            return;
+        }
 
-            if (nameParts.Length != 2)
+        // Initialize the game
+        InitializeGame();
+
+        // Now tell the player to display cards AFTER initialization
+        player.DisplayCards();
+    }
+
+    public void InitializeGame()
+    {
+        // Clear any existing cards
+        ClearTable();
+
+        // Initialize the deck
+        deck.InitializeDeck();
+
+        // Create a visual representation of the deck on the table
+        // WITHOUT removing cards from the actual deck
+        CreateDeckVisual();
+    }
+
+    private void ClearTable()
+    {
+        // Deactivate all cards currently in play
+        foreach (PlayingCard card in cardsInPlay)
+        {
+            if (card != null && card.gameObject != null)
             {
-                Debug.LogWarning($"Invalid sprite name format: {face.name}");
-                continue;
+                Destroy(card.gameObject);
             }
+        }
+        cardsInPlay.Clear();
 
-            // Extract rank and suit from the name
-            string rank = nameParts[0];
-            string suit = nameParts[1];
-
-            // Get the rank value (for Blackjack-style games, etc.)
-            int rankValue = GetRankValue(rank);
-
-            // Stack offset to position cards in a stack (adjust as needed)
-            float stackOffset = i * 0.1f;
-            Vector3 cardPos = bottomRightCorner + new Vector3(-stackOffset, stackOffset, 0);
-
-            // Instantiate the card and get its PlayingCard script
-            GameObject newCard = Instantiate(cardPrefab, cardPos, Quaternion.identity);
-            PlayingCard cardScript = newCard.GetComponent<PlayingCard>();
-
-            if (cardScript == null)
+        // Clear deck stack
+        foreach (PlayingCard card in deckStack)
+        {
+            if (card != null && card.gameObject != null)
             {
-                Debug.LogError("PlayingCard script not found on prefab!");
-                continue;
+                Destroy(card.gameObject);
             }
+        }
+        deckStack.Clear();
+    }
 
-            // Set the card data using the card face and back, as well as the rank and suit
-            cardScript.SetCardData(face, cardBack, rank, suit);
-            cardScript.rankValue = rankValue;
+    private void CreateDeckVisual()
+    {
+        // Use the deckArea Transform if available, otherwise use a default position
+        Vector3 spawnPosition;
+        if (deckArea != null)
+        {
+            spawnPosition = deckArea.position;
+        }
+        else
+        {
+            Debug.LogWarning("DeckArea reference is not set! Using a default position.");
+            spawnPosition = new Vector3(8.0f, -5.0f, 0f); // Fallback position
+        }
 
-            // Parent the card to the gameBoard to keep everything organized
-            newCard.transform.SetParent(gameBoard.transform, true); // true keeps world position
+        // Create a small stack of cards to represent the deck (just a few for visual effect)
+        int visualDeckSize = Mathf.Min(5, deck.GetCardCount()); // Show max 5 cards in visual stack
+
+        for (int i = 0; i < visualDeckSize; i++)
+        {
+            // Use the deck to create a proper card
+            PlayingCard card = deck.CreateDeckVisualCard();
+
+            if (card != null)
+            {
+                // Position with slight offset for stack effect
+                card.transform.position = new Vector3(
+                    spawnPosition.x + (i * 0.02f),
+                    spawnPosition.y + (i * 0.02f),
+                    spawnPosition.z - (i * 0.001f)); // Small offsets for visual stacking
+
+                // Apply scale to control size
+                card.transform.localScale = new Vector3(cardScale, cardScale, cardScale);
+
+                // Ensure card stays showing back
+                card.ShowBack();
+                deckStack.Add(card);
+            }
         }
     }
 
-    // Blackjack-style values: 2-10 = face value, J/Q/K = 10, A = 11
-    private int GetRankValue(string rank)
+    public PlayingCard DrawCardToPosition(Vector3 position)
     {
-        return rank switch
+        PlayingCard card = deck.DrawCard();
+        if (card != null)
+        {
+            card.gameObject.SetActive(true);
+
+            // Apply the cardScale to the drawn card
+            card.transform.localScale = new Vector3(cardScale, cardScale, cardScale);
+
+            card.transform.position = position;
+            card.ShowFront(); // Show the front of the card
+            cardsInPlay.Add(card);
+
+            // Update visual deck stack if cards are getting low
+            UpdateDeckVisual();
+        }
+        return card;
+    }
+
+    // Update the visual appearance of the deck stack
+    private void UpdateDeckVisual()
+    {
+        // Hide the deck visual completely if the deck is empty
+        if (deck.GetCardCount() <= 0 && deckStack.Count > 0)
+        {
+            foreach (PlayingCard card in deckStack)
+            {
+                if (card != null && card.gameObject != null)
+                {
+                    Destroy(card.gameObject);
+                }
+            }
+            deckStack.Clear();
+        }
+    }
+
+    // Handle card values like in Balatro (needed for gameplay)
+    public int GetCardValue(PlayingCard card)
+    {
+        // Assign rankValue based on the card's rank
+        int value = card.rank switch
         {
             "2" => 2,
             "3" => 3,
@@ -85,5 +177,7 @@ public class GameManager : MonoBehaviour
             "Ace" => 11,
             _ => 0
         };
+
+        return value;
     }
 }
