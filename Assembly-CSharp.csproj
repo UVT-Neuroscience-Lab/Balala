@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\DataLostController.cs" />
     <Compile Include="Assets\Scripts\TrainingCompletedDialog.cs" />
+    <Compile Include="Assets\Scripts\CardSelection.cs" />
+    <Compile Include="Assets\Scripts\Level.cs" />
     <Compile Include="Assets\Scripts\Card.cs" />
     <Compile Include="Assets\Scripts\SQController.cs" />
     <Compile Include="Assets\ClassSelectionAvailableExample.cs" />

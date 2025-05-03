@@ -26,9 +26,9 @@ public class ClassSelectionAvailableExample : MonoBehaviour
         {
             switch (_selectedClass)
             {
-                case 0:
+                case 0: 
                     break;
-                case 1:
+                case 1:  
                     break;
                 case 2:
                     break;
@@ -40,7 +40,10 @@ public class ClassSelectionAvailableExample : MonoBehaviour
                     break;
                 case 6:
                     break;
-
+                case 7:
+                    break;
+                case 8:
+                    break;
             }
             _update = false;
         } 

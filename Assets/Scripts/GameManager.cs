@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
     // Add reference to the Player
     public Player player;
 
+    // Add reference to Level
+    public Level currentLevel;
+
+    // Add reference to deckArea
     public Transform deckArea;
 
     private List<PlayingCard> cardsInPlay = new List<PlayingCard>();
@@ -38,7 +42,6 @@ public class GameManager : MonoBehaviour
 
         // Initialize the game
         InitializeGame();
-
         // Now tell the player to display cards AFTER initialization
         player.DisplayCards();
     }
@@ -54,6 +57,8 @@ public class GameManager : MonoBehaviour
         // Create a visual representation of the deck on the table
         // WITHOUT removing cards from the actual deck
         CreateDeckVisual();
+
+        currentLevel = new Level(1, 50);
     }
 
     private void ClearTable()

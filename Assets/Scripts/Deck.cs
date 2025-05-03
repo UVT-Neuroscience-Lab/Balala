@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Gtec.UnityInterface;
 
 public class Deck : MonoBehaviour
 {
     public GameObject cardPrefab;
     private Sprite cardBackSprite; // Will be loaded from Resources
     private List<PlayingCard> deck = new List<PlayingCard>(); // List of all cards in the deck
-
     void Awake()
     {
         // Load the card back sprite
@@ -52,6 +52,7 @@ public class Deck : MonoBehaviour
                 GameObject cardObject = Instantiate(cardPrefab, transform);  // Create the card prefab
                 PlayingCard card = cardObject.GetComponent<PlayingCard>(); // Get the PlayingCard component
 
+
                 if (card == null)
                 {
                     Debug.LogError("PlayingCard component not found on card prefab!");
@@ -71,6 +72,7 @@ public class Deck : MonoBehaviour
                 card.SetCardData(frontSprite, cardBackSprite, rank, suit);
 
                 deck.Add(card);  // Add the card to the deck
+
                 cardObject.SetActive(false);  // Set the card inactive initially
             }
         }

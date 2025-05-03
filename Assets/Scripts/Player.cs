@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Gtec.UnityInterface;
 
 public class Player : MonoBehaviour
 {
@@ -14,10 +15,16 @@ public class Player : MonoBehaviour
     private List<PlayingCard> cardsInHand = new List<PlayingCard>();
 
     [Header("Visual Settings")]
-    public Vector3 handPosition = new Vector3(-2.0f, -3.5f, 0f); 
+    public Vector3 handPosition = new Vector3(-2.0f, -3.5f, 0f);
+
+    public Sprite darkSprite;
+    public Sprite flashSprite;
+
+    private ERPFlashController2D bciManager;
 
     void Start()
     {
+        bciManager = GameObject.FindFirstObjectByType<ERPFlashController2D>();
         // Validate we have all necessary references
         if (gameManager == null)
         {
@@ -52,6 +59,16 @@ public class Player : MonoBehaviour
         {
             // Add to our hand list
             cardsInHand.Add(card);
+
+            ERPFlashObject2D objBci = bciManager.TrainingObject;
+
+            objBci.ClassId = cardsInHand.IndexOf(card) + 1;
+            objBci.GameObject = card.gameObject;
+            objBci.DarkSprite = darkSprite;
+            objBci.FlashSprite = flashSprite;
+            objBci.Rotate = false;
+
+            bciManager.ApplicationObjects.Add(objBci);
 
             // Always show the card face up
             card.ShowFront();
