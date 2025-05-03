@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7750469e6a7250b47bf6c22224e4f2b3
+guid: bca6d294ae6ddde458ece3b65a095fba
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8137299618313439272
-    second: 8BitDeck11_0
+      213: -7848892554136569370
+    second: Queen_of_Hearts_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 8BitDeck11_0
+      name: Queen_of_Hearts_0
       rect:
         serializedVersion: 2
         x: 23
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8d771834c11821f80800000000000000
-      internalID: -8137299618313439272
+      spriteID: 6e93b76aec1231390800000000000000
+      internalID: -7848892554136569370
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      8BitDeck11_0: -8137299618313439272
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

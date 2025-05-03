@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6d26d552c83aecc46bf4116a753cdd65
+guid: ea7cf9fa3a65b074baf4e426728fd8d0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7685902343469914619
-    second: 8BitDeck31_0
+      213: 1260203306420291927
+    second: 6_of_Diamonds_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 8BitDeck31_0
+      name: 6_of_Diamonds_0
       rect:
         serializedVersion: 2
         x: 23
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 506222f4a80365590800000000000000
-      internalID: -7685902343469914619
+      spriteID: 75944f7fa342d7110800000000000000
+      internalID: 1260203306420291927
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      8BitDeck31_0: -7685902343469914619
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

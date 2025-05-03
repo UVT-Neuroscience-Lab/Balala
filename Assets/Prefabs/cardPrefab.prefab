@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3455981949811867955}
   - component: {fileID: 4872450385898079996}
   - component: {fileID: 1920995425369808406}
-  - component: {fileID: 7539455413362946382}
+  - component: {fileID: 1537410035372718231}
   m_Layer: 0
   m_Name: cardPrefab
   m_TagString: Untagged
@@ -135,7 +135,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.0001, y: 0.0001}
   m_EdgeRadius: 0
---- !u!114 &7539455413362946382
+--- !u!114 &1537410035372718231
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,8 +144,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3685215398816462406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f237b5fffbed5e64aa4d5fe38f541bfa, type: 3}
+  m_Script: {fileID: 11500000, guid: bc82ed668077d4e45adbce5b3203448a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frontSprite: {fileID: 6024660318801352897, guid: 84736cf751db4ec4699b9600c032ea44, type: 3}
-  backSprite: {fileID: -1794592419851260582, guid: fd08838805e359c41b111ecfc1c6ec20, type: 3}
+  frontSprite: {fileID: 0}
+  backSprite: {fileID: 0}
+  rank: 
+  suit: 
+  rankValue: 0

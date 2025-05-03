@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 791b8240a9d6617488f3cbbf8018173f
+guid: eda57604f0a93a0459bbb0d7c5265cb3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2139076154522674622
-    second: 8BitDeck9_0
+      213: -8523985406238858913
+    second: 10_of_Hearts_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 8BitDeck9_0
+      name: 10_of_Hearts_0
       rect:
         serializedVersion: 2
         x: 23
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 24ada2e12997052e0800000000000000
-      internalID: -2139076154522674622
+      spriteID: f51e48e5f68b4b980800000000000000
+      internalID: -8523985406238858913
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      8BitDeck9_0: -2139076154522674622
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

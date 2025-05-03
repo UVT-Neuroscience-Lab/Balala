@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7248340bad696af48b75c336ddc077bc
+guid: b9e3cbff4dd831e4b9935a237ff553d3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3917357483304832064
-    second: 8BitDeck13_0
+      213: 5230748383010558510
+    second: Ace_of_Hearts_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 8BitDeck13_0
+      name: Ace_of_Hearts_0
       rect:
         serializedVersion: 2
         x: 23
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0c3b56dbf10c2a9c0800000000000000
-      internalID: -3917357483304832064
+      spriteID: e221bcec0f9579840800000000000000
+      internalID: 5230748383010558510
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      8BitDeck13_0: -3917357483304832064
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\BatteryController.cs" />
     <Compile Include="Assets\Scripts\BCIManager3D.cs" />
     <Compile Include="Assets\Scripts\TrainingDialog.cs" />
+    <Compile Include="Assets\Scripts\PlayingCard.cs" />
     <Compile Include="Assets\Scripts\ConnectionDialog.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\AccuracyController.cs" />

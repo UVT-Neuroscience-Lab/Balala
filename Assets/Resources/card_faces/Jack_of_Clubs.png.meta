@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 69eb5e539fe0b4247959e2621c587dbf
+guid: 7079cd960e18ab0418649573e7a7791f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7190811334093305393
-    second: 8BitDeck23_0
+      213: -5908541520016046376
+    second: Jack_of_Clubs_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 8BitDeck23_0
+      name: Jack_of_Clubs_0
       rect:
         serializedVersion: 2
         x: 23
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fc90480b03b153c90800000000000000
-      internalID: -7190811334093305393
+      spriteID: 8d60cc6dac4a00ea0800000000000000
+      internalID: -5908541520016046376
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      8BitDeck23_0: -7190811334093305393
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

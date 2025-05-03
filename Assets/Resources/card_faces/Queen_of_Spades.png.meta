@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 524ffdae4ef3ed942a8522388f5189df
+guid: 4db802267c9205b4d85545e940aecc9d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2421088152969800161
-    second: 8BitDeck50_0
+      213: 1630117126469560790
+    second: Queen_of_Spades_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 8BitDeck50_0
+      name: Queen_of_Spades_0
       rect:
         serializedVersion: 2
         x: 23
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1e9ebaff8de699120800000000000000
-      internalID: 2421088152969800161
+      spriteID: 6d9af79c3e65f9610800000000000000
+      internalID: 1630117126469560790
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      8BitDeck50_0: 2421088152969800161
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
