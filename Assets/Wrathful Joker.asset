@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f4955fd19e0ad4598bdb4fe65d8a46, type: 3}
+  m_Name: Wrathful Joker
+  m_EditorClassIdentifier: 
+  jokerName: Wrathful Joker
+  jokerArt: {fileID: 1212254299175643817, guid: a16bdf387e261fe45beb29b88385042a, type: 3}
+  targetSuit: Spade
+  bonusPerCard: 3
