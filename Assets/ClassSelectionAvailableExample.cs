@@ -1,14 +1,18 @@
 using Gtec.UnityInterface;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Gtec.UnityInterface.BCIManager;
 
 public class ClassSelectionAvailableExample : MonoBehaviour
 {
+    private Player playerObj;
+
     private uint _selectedClass = 0;
     private bool _update = false;
     void Start()
     {
+        playerObj = GameObject.FindFirstObjectByType<Player>();
         //attach to class selection available event
         BCIManager.Instance.ClassSelectionAvailable += OnClassSelectionAvailable;
     }
@@ -21,26 +25,14 @@ public class ClassSelectionAvailableExample : MonoBehaviour
 
     void Update()
     {
-        //TODO ADD YOUR CODE HERE
         if(_update)
         {
-            switch (_selectedClass)
+            int index = (int)_selectedClass;
+            if (index > 0)
             {
-                case 0:
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
-
+                PlayingCard currentCard = playerObj.GetCardInHand(index - 1);
+                Debug.Log("Current card suit: " + currentCard.suit);
+                currentCard.SelectCard();
             }
             _update = false;
         } 

@@ -147,7 +147,7 @@ public class CardButtonOverlay : MonoBehaviour
         targetScale = originalScale;
     }
 
-    private void OnClick()
+    public void OnClick()
     {
         if (parentCard != null)
         {

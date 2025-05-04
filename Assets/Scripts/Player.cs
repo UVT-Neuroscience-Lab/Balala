@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Gtec.UnityInterface;
 
 public class Player : MonoBehaviour
 {
@@ -14,6 +15,12 @@ public class Player : MonoBehaviour
     private List<PlayingCard> cardsInHand = new List<PlayingCard>();
     private PlayingCard currentlySelectedCard = null;
 
+    [Header("BCI Training Settings")]
+    public Sprite darkSprite;
+    public Sprite flashSprite;
+    public ERPFlashController2D bciManager;
+    public GameObject bciOverlayPrefab; // Prefab for BCI training overlay
+
     [Header("Visual Settings")]
     public Vector3 handPosition = new Vector3(-2.0f, -3.5f, 0f);
 
@@ -27,6 +34,11 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Player is missing GameManager reference!");
             return;
+        }
+
+        if (bciOverlayPrefab == null)
+        {
+            Debug.LogWarning("BCI Overlay prefab is missing! Please assign a prefab with a SpriteRenderer component.");
         }
     }
 
@@ -69,11 +81,76 @@ public class Player : MonoBehaviour
             // Add to our hand list
             cardsInHand.Add(card);
 
+            // Create BCI training overlay for this card
+            CreateBCIOverlayForCard(card, cardIndex);
+
             // Always show the card face up
             card.ShowFront();
 
             // Register for selection events
             card.OnCardSelected += HandleCardSelected;
+        }
+    }
+
+    // Create BCI training overlay for a card
+    private void CreateBCIOverlayForCard(PlayingCard card, int cardIndex)
+    {
+        if (bciOverlayPrefab != null)
+        {
+            // Create an overlay object as a child of the card
+            GameObject overlayObj = Instantiate(bciOverlayPrefab, card.transform);
+
+            // Position the overlay in the center of the card
+            overlayObj.transform.localPosition = Vector3.zero;
+
+            // Make sure it's slightly in front of the card
+            Vector3 overlayPos = overlayObj.transform.localPosition;
+            overlayPos.z = -2.0f; // Smaller z-offset to ensure it's in front
+            overlayObj.transform.localPosition = overlayPos;
+
+            // Make sure the scale is appropriate (might need adjustment based on your card size)
+            overlayObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+            // Make sure we have a sprite renderer component to use
+            SpriteRenderer spriteRenderer = overlayObj.GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = overlayObj.AddComponent<SpriteRenderer>();
+            }
+
+            // Set sprite renderer properties for visibility
+            spriteRenderer.sprite = darkSprite;
+            spriteRenderer.color = new Color(1f, 1f, 1f, 1f); // Full opacity
+            spriteRenderer.sortingOrder = 10; // Higher than the card's sorting order
+
+            // Debug check to make sure sprites are assigned
+            if (darkSprite == null || flashSprite == null)
+            {
+                Debug.LogError("Dark sprite or flash sprite is null on Player component!");
+            }
+
+            // Create custom BCI object that targets the overlay instead of the card itself
+            ERPFlashObject2D objBci = new ERPFlashObject2D();
+            objBci.ClassId = cardIndex + 1;
+            objBci.GameObject = overlayObj;
+            objBci.DarkSprite = darkSprite;
+            objBci.FlashSprite = flashSprite;
+            objBci.Rotate = false;
+
+            // Add to BCI manager
+            if (bciManager != null && bciManager.ApplicationObjects != null)
+            {
+                bciManager.ApplicationObjects.Add(objBci);
+                Debug.Log($"Added BCI overlay for card {cardIndex} with ClassId {objBci.ClassId}");
+            }
+            else
+            {
+                Debug.LogError("BCI Manager or its ApplicationObjects list is null!");
+            }
+        }
+        else
+        {
+            Debug.LogError("BCI Overlay prefab is not assigned. Cannot create training overlay.");
         }
     }
 
@@ -206,6 +283,12 @@ public class Player : MonoBehaviour
         }
 
         cardsInHand.Clear();
+
+        // Also clear any BCI application objects
+        if (bciManager != null && bciManager.ApplicationObjects != null)
+        {
+            bciManager.ApplicationObjects.Clear();
+        }
     }
 
     // Get a card in hand by index
