@@ -18,7 +18,7 @@ public class PlayingCard : MonoBehaviour
     [Header("Animation")]
     public float selectionMoveAmount = 0.3f;
     public float animationSpeed = 5f;
-    private Vector3 basePosition; // ✅ CHANGED: no longer set in Awake
+    private Vector3 basePosition;
     private Vector3 targetPosition;
     private bool isAnimating = false;
 
@@ -71,9 +71,17 @@ public class PlayingCard : MonoBehaviour
 
     public void SelectCard()
     {
+        // Toggle selection state
         isSelected = !isSelected;
+
+        // Update position based on selection state
         targetPosition = basePosition + (isSelected ? Vector3.up * selectionMoveAmount : Vector3.zero);
         isAnimating = true;
+
+        // Log the selection state change
+        Debug.Log($"Card {rank} of {suit} selection changed to: {isSelected}");
+
+        // Invoke the callback
         OnCardSelected?.Invoke(this);
     }
 
@@ -82,12 +90,16 @@ public class PlayingCard : MonoBehaviour
         if (isSelected != selected)
         {
             isSelected = selected;
+
+            // Update position based on new selection state
             targetPosition = basePosition + (isSelected ? Vector3.up * selectionMoveAmount : Vector3.zero);
             isAnimating = true;
+
+            Debug.Log($"Card {rank} of {suit} selection explicitly set to: {isSelected}");
         }
     }
 
-    public void InitializeBasePosition() // ✅ NEW: call this AFTER layout
+    public void InitializeBasePosition()
     {
         basePosition = transform.localPosition;
         targetPosition = basePosition;
@@ -126,6 +138,9 @@ public class PlayingCard : MonoBehaviour
 
         spriteRenderer.sprite = backSprite;
         isFaceUp = false;
+
+        // Ensure card starts unselected
+        isSelected = false;
     }
 
     public void ShowFront() { spriteRenderer.sprite = frontSprite; isFaceUp = true; }
@@ -135,6 +150,13 @@ public class PlayingCard : MonoBehaviour
     {
         if (isFaceUp) ShowBack();
         else ShowFront();
+    }
+
+    // Called when the object is about to be destroyed
+    void OnDestroy()
+    {
+        // Make sure to clean up
+        OnCardSelected = null;
     }
 }
 

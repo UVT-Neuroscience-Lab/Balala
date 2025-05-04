@@ -33,13 +33,17 @@ public class Player : MonoBehaviour
     // This will be called by the GameManager when it's ready
     public void DisplayCards()
     {
+        // Clear hand and reset selection state
         ClearHand();
         currentlySelectedCard = null;
 
+        // Create new cards
         for (int i = 0; i < handSize; i++)
         {
             AddCardToHand(i);
         }
+
+        Debug.Log($"Displayed new hand with {cardsInHand.Count} cards, no cards selected");
     }
 
     // Add a single card to the hand at the specified position
@@ -72,7 +76,6 @@ public class Player : MonoBehaviour
             card.OnCardSelected += HandleCardSelected;
         }
     }
-
 
     private void HandleCardSelected(PlayingCard selectedCard)
     {
@@ -111,6 +114,24 @@ public class Player : MonoBehaviour
             if (selectedCards.Count > 0)
             {
                 gameManager.OnMultipleCardsSelected(selectedCards);
+            }
+        }
+    }
+
+    // Reset all selection state
+    public void ResetSelectionState()
+    {
+        Debug.Log("Explicitly resetting all card selection states");
+
+        // Reset the currently selected card reference
+        currentlySelectedCard = null;
+
+        // Deselect all cards in hand (just to be safe, though they should be cleared already)
+        foreach (PlayingCard card in cardsInHand)
+        {
+            if (card != null && card.isSelected)
+            {
+                card.SetSelectionState(false);
             }
         }
     }
@@ -163,10 +184,21 @@ public class Player : MonoBehaviour
     // Remove all cards from hand
     public void ClearHand()
     {
+        Debug.Log($"Clearing hand with {cardsInHand.Count} cards");
+
+        // First reset selection state
+        currentlySelectedCard = null;
+
         foreach (PlayingCard card in cardsInHand)
         {
             if (card != null && card.gameObject != null)
             {
+                // Make sure card is deselected first
+                if (card.isSelected)
+                {
+                    card.SetSelectionState(false);
+                }
+
                 // Unregister event before destroying
                 card.OnCardSelected -= HandleCardSelected;
                 Destroy(card.gameObject);
@@ -174,7 +206,6 @@ public class Player : MonoBehaviour
         }
 
         cardsInHand.Clear();
-        currentlySelectedCard = null;
     }
 
     // Get a card in hand by index

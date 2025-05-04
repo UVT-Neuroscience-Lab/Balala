@@ -209,30 +209,49 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // Store selected cards value before clearing
+        int scoreToAdd = 0;
+
         if (!player.allowMultipleSelection)
         {
             // Single card selection mode
             PlayingCard selectedCard = player.GetSelectedCard();
             if (selectedCard != null)
             {
-                currentScore += GetCardValue(selectedCard);
-                DiscardSelectedCards();
+                scoreToAdd = GetCardValue(selectedCard);
             }
         }
         else
         {
             // Multiple card selection mode
-            int selectedValue = player.GetSelectedCardsValue();
-            if (selectedValue > 0)
-            {
-                currentScore += selectedValue;
-                DiscardSelectedCards();
-            }
+            scoreToAdd = player.GetSelectedCardsValue();
         }
 
-        UpdateLevelUI();
-        CheckLevelCompletion();
-        DrawNewHand();
+        // Add score only if there were selected cards
+        if (scoreToAdd > 0)
+        {
+            currentScore += scoreToAdd;
+
+            // Clear everything
+            DiscardSelectedCards();
+
+            // Complete reset of Player's selection state
+            player.ResetSelectionState();
+
+            // Update UI
+            UpdateLevelUI();
+            CheckLevelCompletion();
+
+            // Draw new hand only after everything is reset
+            player.DisplayCards();
+            UpdateUIValues();
+
+            // Disable play button until new selection is made
+            if (playHandButton != null)
+            {
+                playHandButton.interactable = false;
+            }
+        }
     }
 
     private void DrawNewHand()
@@ -241,6 +260,13 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("Player reference is null in DrawNewHand!");
             return;
+        }
+
+        // Make sure any selection state is completely reset before drawing a new hand
+        if (player.GetSelectedCard() != null)
+        {
+            Debug.Log("Resetting selection state before drawing new hand");
+            player.ResetSelectionState();
         }
 
         player.DisplayCards();
@@ -351,8 +377,14 @@ public class GameManager : MonoBehaviour
     // Called when a card is selected
     public void OnCardSelected(PlayingCard selectedCard)
     {
+        if (selectedCard == null)
+        {
+            Debug.LogError("OnCardSelected called with null card!");
+            return;
+        }
+
         Debug.Log($"GameManager received selection: {selectedCard.rank} of {selectedCard.suit}");
-        Debug.Log($"Card value: {GetCardValue(selectedCard)}");
+        Debug.Log($"Card value: {GetCardValue(selectedCard)}, isSelected: {selectedCard.isSelected}");
 
         // Update UI to show current values
         UpdateUIValues();
@@ -384,15 +416,24 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        List<PlayingCard> cardsToDiscard = player.GetSelectedCards();
+        // Get a copy of the list to avoid modification issues during iteration
+        List<PlayingCard> cardsToDiscard = new List<PlayingCard>(player.GetSelectedCards());
+
+        Debug.Log($"Discarding {cardsToDiscard.Count} selected cards");
+
         foreach (PlayingCard card in cardsToDiscard)
         {
             if (card != null)
             {
+                // Make sure card is visually deselected first
+                card.SetSelectionState(false);
+
+                // Remove from play tracking
                 cardsInPlay.Remove(card);
+
+                // Destroy the GameObject
                 Destroy(card.gameObject);
             }
         }
-        player.ClearHand();
     }
 }
