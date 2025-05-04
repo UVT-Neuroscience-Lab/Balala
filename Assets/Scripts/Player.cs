@@ -5,11 +5,11 @@ public class Player : MonoBehaviour
 {
     [Header("References")]
     public GameManager gameManager;
-    public Transform handArea;  // The area where cards are displayed
+    public Transform handArea;
 
     [Header("Hand Settings")]
-    public int handSize = 5;  // Fixed hand size
-    public float cardSpacing = 2.2f;  // Horizontal spacing between cards
+    public int handSize = 5;
+    public float cardSpacing = 2.2f;
 
     private List<PlayingCard> cardsInHand = new List<PlayingCard>();
     private PlayingCard currentlySelectedCard = null;
@@ -33,11 +33,9 @@ public class Player : MonoBehaviour
     // This will be called by the GameManager when it's ready
     public void DisplayCards()
     {
-        // Clear any existing cards
         ClearHand();
         currentlySelectedCard = null;
 
-        // Display exactly 5 cards
         for (int i = 0; i < handSize; i++)
         {
             AddCardToHand(i);
@@ -105,6 +103,10 @@ public class Player : MonoBehaviour
             // You could implement logic here to track all selected cards in a list
             List<PlayingCard> selectedCards = GetSelectedCards();
 
+            // Calculate and log the total value of selected cards
+            int totalValue = GetSelectedCardsValue();
+            Debug.Log($"Total value of selected cards: {totalValue}");
+
             // Example: Notify GameManager with all selected cards
             if (selectedCards.Count > 0)
             {
@@ -127,6 +129,20 @@ public class Player : MonoBehaviour
         }
 
         return selectedCards;
+    }
+
+    // Calculate the total value of all selected cards
+    public int GetSelectedCardsValue()
+    {
+        int totalValue = 0;
+        List<PlayingCard> selectedCards = GetSelectedCards();
+
+        foreach (PlayingCard card in selectedCards)
+        {
+            totalValue += gameManager.GetCardValue(card);
+        }
+
+        return totalValue;
     }
 
     // Calculate the position for a card in the hand
@@ -190,7 +206,6 @@ public class Player : MonoBehaviour
         return totalValue;
     }
 
-    // Get the currently selected card
     public PlayingCard GetSelectedCard()
     {
         return currentlySelectedCard;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; // Added for UI components
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Card Selection")]
     public GameObject cardButtonOverlayPrefab; // Assign this in the inspector
+
+    [Header("UI Elements")]
+    public Text selectedValueText; // Assign this in inspector to show selected card values
+    public Text handValueText; // Optional: to show total hand value
 
     // Add reference to the Player
     public Player player;
@@ -43,6 +48,46 @@ public class GameManager : MonoBehaviour
 
         // Now tell the player to display cards AFTER initialization
         player.DisplayCards();
+
+        // Initialize UI values
+        UpdateUIValues();
+    }
+
+    // Update UI elements with current values
+    private void UpdateUIValues()
+    {
+        // Update total hand value if we have that UI element
+        if (handValueText != null)
+        {
+            int handValue = player.GetHandValue();
+            handValueText.text = $"Hand Value: {handValue}";
+        }
+
+        // Update selected card value
+        if (selectedValueText != null)
+        {
+            // For single selection mode
+            if (!player.allowMultipleSelection)
+            {
+                PlayingCard selectedCard = player.GetSelectedCard();
+                if (selectedCard != null)
+                {
+                    int cardValue = GetCardValue(selectedCard);
+                    selectedValueText.text = $"Selected: {cardValue}";
+                }
+                else
+                {
+                    selectedValueText.text = "Selected: None";
+                }
+            }
+            // For multiple selection mode
+            else
+            {
+                int selectedValue = player.GetSelectedCardsValue();
+                List<PlayingCard> selectedCards = player.GetSelectedCards();
+                selectedValueText.text = $"Selected: {selectedValue} ({selectedCards.Count} cards)";
+            }
+        }
     }
 
     public void InitializeGame()
@@ -189,6 +234,10 @@ public class GameManager : MonoBehaviour
     public void OnCardSelected(PlayingCard selectedCard)
     {
         Debug.Log($"GameManager received selection: {selectedCard.rank} of {selectedCard.suit}");
+        Debug.Log($"Card value: {GetCardValue(selectedCard)}");
+
+        // Update UI to show current values
+        UpdateUIValues();
     }
 
     // For multiple card selection mode
@@ -196,10 +245,18 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"GameManager received multiple card selection. Count: {selectedCards.Count}");
 
+        // Calculate total value of selected cards
+        int totalValue = 0;
+        foreach (PlayingCard card in selectedCards)
+        {
+            totalValue += GetCardValue(card);
+        }
+
+        Debug.Log($"Total value of selected cards: {totalValue}");
+
+        // Update UI to show current values
+        UpdateUIValues();
+
         // Add your game logic here for what happens when multiple cards are selected
-        // For example:
-        // - Check if the combination is valid
-        // - Calculate total value
-        // - Enable a "Play Selected" button
     }
 }
