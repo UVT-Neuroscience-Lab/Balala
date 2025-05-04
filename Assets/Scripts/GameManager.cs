@@ -62,6 +62,10 @@ public class GameManager : MonoBehaviour
             playHandButton.onClick.AddListener(PlayHand);
             playHandButton.interactable = false; // Disabled until cards are selected
         }
+        else
+        {
+            Debug.LogWarning("Play Hand Button reference is missing!");
+        }
     }
 
     private void UpdateUIValues()
@@ -96,6 +100,28 @@ public class GameManager : MonoBehaviour
                 int selectedValue = player.GetSelectedCardsValue();
                 List<PlayingCard> selectedCards = player.GetSelectedCards();
                 selectedValueText.text = $"Selected: {selectedValue} ({selectedCards.Count} cards)";
+            }
+        }
+
+        // Update play button state based on selection
+        UpdatePlayButtonState();
+    }
+
+    // New method to update play button state
+    private void UpdatePlayButtonState()
+    {
+        if (playHandButton != null)
+        {
+            // Enable button only if cards are selected
+            if (!player.allowMultipleSelection)
+            {
+                // Single card selection mode
+                playHandButton.interactable = player.GetSelectedCard() != null;
+            }
+            else
+            {
+                // Multiple card selection mode
+                playHandButton.interactable = player.GetSelectedCards().Count > 0;
             }
         }
     }
@@ -177,6 +203,12 @@ public class GameManager : MonoBehaviour
 
     public void PlayHand()
     {
+        if (player == null)
+        {
+            Debug.LogError("Player reference is missing in PlayHand!");
+            return;
+        }
+
         if (!player.allowMultipleSelection)
         {
             // Single card selection mode
@@ -207,12 +239,20 @@ public class GameManager : MonoBehaviour
     {
         if (player == null)
         {
-            Debug.LogError("Player reference is null!");
+            Debug.LogError("Player reference is null in DrawNewHand!");
             return;
         }
 
         player.DisplayCards();
-        playHandButton.interactable = false;
+
+        // Update UI to reflect new hand
+        UpdateUIValues();
+
+        // Null check before accessing playHandButton
+        if (playHandButton != null)
+        {
+            playHandButton.interactable = false;
+        }
     }
 
     private void CheckLevelCompletion()
@@ -233,6 +273,12 @@ public class GameManager : MonoBehaviour
 
     public PlayingCard DrawCardToPosition(Vector3 position)
     {
+        if (deck == null)
+        {
+            Debug.LogError("Deck reference is null in DrawCardToPosition!");
+            return null;
+        }
+
         PlayingCard card = deck.DrawCard();
         if (card != null)
         {
@@ -258,7 +304,7 @@ public class GameManager : MonoBehaviour
     private void UpdateDeckVisual()
     {
         // Hide the deck visual completely if the deck is empty
-        if (deck.GetCardCount() <= 0 && deckStack.Count > 0)
+        if (deck != null && deck.GetCardCount() <= 0 && deckStack.Count > 0)
         {
             foreach (PlayingCard card in deckStack)
             {
@@ -274,6 +320,12 @@ public class GameManager : MonoBehaviour
     // Handle card values like in Balatro (needed for gameplay)
     public int GetCardValue(PlayingCard card)
     {
+        if (card == null)
+        {
+            Debug.LogError("Attempting to get value of null card!");
+            return 0;
+        }
+
         // Assign rankValue based on the card's rank
         int value = card.rank switch
         {
@@ -322,17 +374,24 @@ public class GameManager : MonoBehaviour
 
         // Update UI to show current values
         UpdateUIValues();
-
-        // Add your game logic here for what happens when multiple cards are selected
     }
 
     private void DiscardSelectedCards()
     {
+        if (player == null)
+        {
+            Debug.LogError("Player reference is null in DiscardSelectedCards!");
+            return;
+        }
+
         List<PlayingCard> cardsToDiscard = player.GetSelectedCards();
         foreach (PlayingCard card in cardsToDiscard)
         {
-            cardsInPlay.Remove(card);
-            Destroy(card.gameObject);
+            if (card != null)
+            {
+                cardsInPlay.Remove(card);
+                Destroy(card.gameObject);
+            }
         }
         player.ClearHand();
     }
