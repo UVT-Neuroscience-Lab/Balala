@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Added for UI components
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,13 +14,21 @@ public class GameManager : MonoBehaviour
     public Vector3 deckCornerPosition = new Vector3(12.0f, -7.0f, 0f);
 
     [Header("Card Selection")]
-    public GameObject cardButtonOverlayPrefab; // Assign this in the inspector
+    public GameObject cardButtonOverlayPrefab;
 
     [Header("UI Elements")]
-    public Text selectedValueText; // Assign this in inspector to show selected card values
-    public Text handValueText; // Optional: to show total hand value
+    public Text selectedValueText;
+    public Text handValueText;
 
-    // Add reference to the Player
+    [Header("Level Settings")]
+    public int currentLevel = 1;
+    public int scoreToBeat = 50;
+    public int currentScore = 0;
+    public Text levelText;
+    public Text scoreToBeatText;
+    public Text currentScoreText;
+    public Button playHandButton;
+
     public Player player;
 
     public Transform deckArea;
@@ -30,7 +38,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // First make sure all references are set
         if (deck == null)
         {
             Debug.LogError("Deck reference is missing!");
@@ -43,17 +50,20 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // Initialize the game
         InitializeGame();
 
-        // Now tell the player to display cards AFTER initialization
         player.DisplayCards();
 
-        // Initialize UI values
         UpdateUIValues();
+        UpdateLevelUI();
+
+        if (playHandButton != null)
+        {
+            playHandButton.onClick.AddListener(PlayHand);
+            playHandButton.interactable = false; // Disabled until cards are selected
+        }
     }
 
-    // Update UI elements with current values
     private void UpdateUIValues()
     {
         // Update total hand value if we have that UI element
@@ -165,6 +175,62 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void PlayHand()
+    {
+        if (!player.allowMultipleSelection)
+        {
+            // Single card selection mode
+            PlayingCard selectedCard = player.GetSelectedCard();
+            if (selectedCard != null)
+            {
+                currentScore += GetCardValue(selectedCard);
+                DiscardSelectedCards();
+            }
+        }
+        else
+        {
+            // Multiple card selection mode
+            int selectedValue = player.GetSelectedCardsValue();
+            if (selectedValue > 0)
+            {
+                currentScore += selectedValue;
+                DiscardSelectedCards();
+            }
+        }
+
+        UpdateLevelUI();
+        CheckLevelCompletion();
+        DrawNewHand();
+    }
+
+    private void DrawNewHand()
+    {
+        if (player == null)
+        {
+            Debug.LogError("Player reference is null!");
+            return;
+        }
+
+        player.DisplayCards();
+        playHandButton.interactable = false;
+    }
+
+    private void CheckLevelCompletion()
+    {
+        if (currentScore >= scoreToBeat)
+        {
+            // Level completed!
+            Debug.Log($"Level {currentLevel} completed!");
+        }
+    }
+
+    private void UpdateLevelUI()
+    {
+        if (levelText != null) levelText.text = $"Level: {currentLevel}";
+        if (scoreToBeatText != null) scoreToBeatText.text = $"Target: {scoreToBeat}";
+        if (currentScoreText != null) currentScoreText.text = $"Score: {currentScore}";
+    }
+
     public PlayingCard DrawCardToPosition(Vector3 position)
     {
         PlayingCard card = deck.DrawCard();
@@ -258,5 +324,16 @@ public class GameManager : MonoBehaviour
         UpdateUIValues();
 
         // Add your game logic here for what happens when multiple cards are selected
+    }
+
+    private void DiscardSelectedCards()
+    {
+        List<PlayingCard> cardsToDiscard = player.GetSelectedCards();
+        foreach (PlayingCard card in cardsToDiscard)
+        {
+            cardsInPlay.Remove(card);
+            Destroy(card.gameObject);
+        }
+        player.ClearHand();
     }
 }
