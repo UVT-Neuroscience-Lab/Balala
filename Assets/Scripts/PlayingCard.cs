@@ -1,4 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class PlayingCard : MonoBehaviour
 {
@@ -8,6 +9,19 @@ public class PlayingCard : MonoBehaviour
     public string suit;
     public int rankValue;
 
+    [Header("Selection")]
+    public GameObject buttonOverlayPrefab;
+    private GameObject buttonInstance;
+    public bool isSelected = false;
+    public System.Action<PlayingCard> OnCardSelected;
+
+    [Header("Animation")]
+    public float selectionMoveAmount = 0.3f;
+    public float animationSpeed = 5f;
+    private Vector3 basePosition; // ✅ CHANGED: no longer set in Awake
+    private Vector3 targetPosition;
+    private bool isAnimating = false;
+
     private SpriteRenderer spriteRenderer;
     private bool isFaceUp = false;
 
@@ -15,9 +29,74 @@ public class PlayingCard : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
-        {
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+    }
+
+    void Start()
+    {
+        CreateButtonOverlay();
+    }
+
+    void Update()
+    {
+        if (isAnimating)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, Time.deltaTime * animationSpeed);
+            if (Vector3.Distance(transform.localPosition, targetPosition) < 0.01f)
+            {
+                transform.localPosition = targetPosition;
+                isAnimating = false;
+            }
         }
+    }
+
+    private void CreateButtonOverlay()
+    {
+        if (buttonOverlayPrefab != null)
+        {
+            buttonInstance = Instantiate(buttonOverlayPrefab, transform);
+            buttonInstance.transform.localPosition = Vector3.zero;
+            buttonInstance.transform.localScale = Vector3.one;
+        }
+        else
+        {
+            BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
+            collider.size = new Vector2(1f, 1.4f);
+            collider.isTrigger = true;
+
+            CardClickHandler clickHandler = gameObject.AddComponent<CardClickHandler>();
+            clickHandler.parentCard = this;
+        }
+    }
+
+    public void SelectCard()
+    {
+        isSelected = !isSelected;
+        targetPosition = basePosition + (isSelected ? Vector3.up * selectionMoveAmount : Vector3.zero);
+        isAnimating = true;
+        OnCardSelected?.Invoke(this);
+    }
+
+    public void SetSelectionState(bool selected)
+    {
+        if (isSelected != selected)
+        {
+            isSelected = selected;
+            targetPosition = basePosition + (isSelected ? Vector3.up * selectionMoveAmount : Vector3.zero);
+            isAnimating = true;
+        }
+    }
+
+    public void InitializeBasePosition() // ✅ NEW: call this AFTER layout
+    {
+        basePosition = transform.localPosition;
+        targetPosition = basePosition;
+    }
+
+    public void DestroyButton()
+    {
+        if (buttonInstance != null)
+            Destroy(buttonInstance);
     }
 
     public void SetCardData(Sprite front, Sprite back, string rank, string suit)
@@ -27,7 +106,6 @@ public class PlayingCard : MonoBehaviour
         this.rank = rank;
         this.suit = suit;
 
-        // Assign rankValue based on the card's rank
         rankValue = rank switch
         {
             "2" => 2,
@@ -46,52 +124,27 @@ public class PlayingCard : MonoBehaviour
             _ => 0
         };
 
-        spriteRenderer.sprite = backSprite; // Start showing the back
-        isFaceUp = false;
-    }
-
-    public void ShowFront()
-    {
-        spriteRenderer.sprite = frontSprite;
-        isFaceUp = true;
-    }
-
-    public void ShowBack()
-    {
         spriteRenderer.sprite = backSprite;
         isFaceUp = false;
     }
 
+    public void ShowFront() { spriteRenderer.sprite = frontSprite; isFaceUp = true; }
+    public void ShowBack() { spriteRenderer.sprite = backSprite; isFaceUp = false; }
+
     public void FlipCard()
     {
-        if (isFaceUp)
-        {
-            ShowBack();
-        }
-        else
-        {
-            ShowFront();
-        }
+        if (isFaceUp) ShowBack();
+        else ShowFront();
     }
+}
 
-    // Balatro-style card animation
-    public void AnimateCardDraw(Vector3 targetPosition, float duration = 0.5f)
+public class CardClickHandler : MonoBehaviour
+{
+    public PlayingCard parentCard;
+
+    private void OnMouseDown()
     {
-        StartCoroutine(MoveCardCoroutine(targetPosition, duration));
-    }
-
-    private System.Collections.IEnumerator MoveCardCoroutine(Vector3 targetPosition, float duration)
-    {
-        Vector3 startPosition = transform.position;
-        float elapsedTime = 0;
-
-        while (elapsedTime < duration)
-        {
-            transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.position = targetPosition;
+        if (parentCard != null)
+            parentCard.SelectCard();
     }
 }

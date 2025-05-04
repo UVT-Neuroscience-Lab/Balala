@@ -10,8 +10,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Card Settings")]
     public float cardScale = 0.7f;  // Control the scale of cards
-    // Move the deck extremely far to the right and bottom corner
-    public Vector3 deckCornerPosition = new Vector3(12.0f, -7.0f, 0f); 
+    public Vector3 deckCornerPosition = new Vector3(12.0f, -7.0f, 0f);
+
+    [Header("Card Selection")]
+    public GameObject cardButtonOverlayPrefab; // Assign this in the inspector
 
     // Add reference to the Player
     public Player player;
@@ -52,7 +54,6 @@ public class GameManager : MonoBehaviour
         deck.InitializeDeck();
 
         // Create a visual representation of the deck on the table
-        // WITHOUT removing cards from the actual deck
         CreateDeckVisual();
     }
 
@@ -129,6 +130,9 @@ public class GameManager : MonoBehaviour
             // Apply the cardScale to the drawn card
             card.transform.localScale = new Vector3(cardScale, cardScale, cardScale);
 
+            // Assign the button overlay prefab
+            card.buttonOverlayPrefab = cardButtonOverlayPrefab;
+
             card.transform.position = position;
             card.ShowFront(); // Show the front of the card
             cardsInPlay.Add(card);
@@ -179,5 +183,23 @@ public class GameManager : MonoBehaviour
         };
 
         return value;
+    }
+
+    // Called when a card is selected
+    public void OnCardSelected(PlayingCard selectedCard)
+    {
+        Debug.Log($"GameManager received selection: {selectedCard.rank} of {selectedCard.suit}");
+    }
+
+    // For multiple card selection mode
+    public void OnMultipleCardsSelected(List<PlayingCard> selectedCards)
+    {
+        Debug.Log($"GameManager received multiple card selection. Count: {selectedCards.Count}");
+
+        // Add your game logic here for what happens when multiple cards are selected
+        // For example:
+        // - Check if the combination is valid
+        // - Calculate total value
+        // - Enable a "Play Selected" button
     }
 }

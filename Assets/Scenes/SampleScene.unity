@@ -199,8 +199,9 @@ MonoBehaviour:
   cardOffset: 0.05
   cardScale: 0.7
   deckCornerPosition: {x: 4.5, y: -3.5, z: 0}
+  cardButtonOverlayPrefab: {fileID: 9040390473890982147, guid: 02571fb7d1e3cea4ab0dd024b139f75b, type: 3}
   player: {fileID: 473936902}
-  deckArea: {fileID: 0}
+  deckArea: {fileID: 967154157}
 --- !u!4 &416402858
 Transform:
   m_ObjectHideFlags: 0
@@ -247,9 +248,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 416402857}
   handArea: {fileID: 915686963}
-  handSize: 5
-  cardSpacing: 1.5
+  handSize: 8
+  cardSpacing: 7
   handPosition: {x: 0, y: 0, z: 0}
+  allowMultipleSelection: 1
 --- !u!4 &473936903
 Transform:
   m_ObjectHideFlags: 0
@@ -443,8 +445,8 @@ Transform:
   m_GameObject: {fileID: 783977605}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 50, y: 25, z: 1}
+  m_LocalPosition: {x: -0.1589, y: 1.113, z: 0}
+  m_LocalScale: {x: 70.66676, y: 31.678703, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 967154157}
@@ -543,7 +545,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 11.007219
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -599,7 +601,7 @@ Transform:
   m_GameObject: {fileID: 967154156}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.336, y: -0.278, z: 0}
+  m_LocalPosition: {x: 0.315, y: 0.244, z: 0}
   m_LocalScale: {x: 0.02, y: 0.04, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

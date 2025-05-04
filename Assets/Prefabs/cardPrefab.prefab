@@ -86,7 +86,7 @@ SpriteRenderer:
   m_Size: {x: 8.3, y: 11.18}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &1920995425369808406
@@ -119,7 +119,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -147,8 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc82ed668077d4e45adbce5b3203448a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frontSprite: {fileID: 0}
-  backSprite: {fileID: 0}
+  frontSprite: {fileID: -1762001816725727042, guid: 5e828b7937f630445a4281998aae9ac0, type: 3}
+  backSprite: {fileID: -1794592419851260582, guid: fd08838805e359c41b111ecfc1c6ec20, type: 3}
   rank: 
   suit: 
   rankValue: 0
+  buttonOverlayPrefab: {fileID: 7800462504223116415, guid: 88dbf033e8674c742be0930d85d4904d, type: 3}
+  isSelected: 0
+  selectionMoveAmount: 0.3
+  animationSpeed: 5
